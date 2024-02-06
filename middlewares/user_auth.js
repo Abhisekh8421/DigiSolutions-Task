@@ -10,7 +10,7 @@ const isAuthenticated = asyncHandler(async (req, res, next) => {
     if (!token) {
       return res.status(400).json({
         success: false,
-        message: "You are not a Authorized person denied access",
+        message: "Denied Access ",
       });
     }
     const decodedToken = jwt.verify(token, process.env.ACCESSTOKEN_SECRET);

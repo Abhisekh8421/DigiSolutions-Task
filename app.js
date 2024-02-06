@@ -23,7 +23,7 @@ app.use("/api/v1/users", userRoutes);
 
 app.use(
   cors({
-    origin: process.env.ORIGIN_URL,
+    origin: "*",
     credentials: true,
     methods: ["get", "post", "delete", "put"],
   })
