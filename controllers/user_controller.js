@@ -141,14 +141,15 @@ export const LogoutUser = asyncHandler(async (req, res) => {
 });
 
 export const UserProfile = asyncHandler(async (req, res) => {
-  return res.status(200).json(
-    new ApiResponse(
-      200,
-      {
-        message: `your profile is found: ${req.user.username}`,
-        user: req.user,
-      },
-      "successfully fetched your profile"
-    )
-  );
+  if (!req.user) {
+    return res.status(400).json({
+      success: false,
+      message: "You are not a Authorized person denied access",
+    });
+  }
+
+  return res.status(400).json({
+    success: false,
+    message: "User Already Exists",
+  });
 });
