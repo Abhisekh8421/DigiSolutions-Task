@@ -10,17 +10,15 @@ cloudinary.config({
 
 export const uploadOnCloudinary = async (localpath) => {
   try {
-    // console.log("localpath", localpath); debugging
-    if (!localpath) return null;
-    const responce = await cloudinary.uploader.upload(localpath, {
+    if (!localpath) throw new Error("Local path is missing");
+    const response = await cloudinary.uploader.upload(localpath, {
       resource_type: "auto",
     });
     fs.unlinkSync(localpath);
-    // console.log("response", responce); for debugging purpose
-    return responce;
+    return response;
   } catch (error) {
-    console.log("error is encountered ", error.message);
+    console.error("Error uploading to Cloudinary:", error.message);
     fs.unlinkSync(localpath);
-    return null;
+    throw new Error("Error uploading to Cloudinary");
   }
 };
