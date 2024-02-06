@@ -23,9 +23,9 @@ app.use("/api/v1/users", userRoutes);
 
 app.use(
   cors({
-    origin: "http://localhost:5173/",
+    origin: "http://localhost:5173",
     credentials: true,
-    methods: ["get", "post", "delete", "put"],
+    methods: ["GET", "POST", "DELETE", "PUT"],
   })
 );
 
