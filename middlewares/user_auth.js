@@ -8,7 +8,10 @@ const isAuthenticated = asyncHandler(async (req, res, next) => {
   try {
     const token = req.cookies.accessToken;
     if (!token) {
-      throw new ApiError(401, "UnAuthorized Request");
+      return res.status(400).json({
+        success: false,
+        message: "You are not a Authorized person denied access",
+      });
     }
     const decodedToken = jwt.verify(token, process.env.ACCESSTOKEN_SECRET);
     const user = await User.findById(decodedToken._id).select(

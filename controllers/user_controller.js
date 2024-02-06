@@ -141,13 +141,6 @@ export const LogoutUser = asyncHandler(async (req, res) => {
 });
 
 export const UserProfile = asyncHandler(async (req, res) => {
-  if (!req.user) {
-    return res.status(400).json({
-      success: false,
-      message: "You are not a Authorized person denied access",
-    });
-  }
-
   return res.status(400).json({
     success: false,
     message: "User Already Exists",
