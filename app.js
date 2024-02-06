@@ -11,6 +11,14 @@ dotenv.config({
 const app = express();
 connectDb();
 
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "DELETE", "PUT"],
+  })
+);
+
 //must be included before routes
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
@@ -20,14 +28,6 @@ app.use(cookieParser());
 //routes
 
 app.use("/api/v1/users", userRoutes);
-
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-    methods: ["GET", "POST", "DELETE", "PUT"],
-  })
-);
 
 app.get("/", (req, res) => {
   res.send("it is working");
