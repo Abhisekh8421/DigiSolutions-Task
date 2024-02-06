@@ -139,3 +139,16 @@ export const LogoutUser = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, {}, "user logged out"));
 });
+
+export const UserProfile = asyncHandler(async (req, res) => {
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        message: `your profile is found: ${req.user.username}`,
+        user: req.user,
+      },
+      "successfully fetched your profile"
+    )
+  );
+});

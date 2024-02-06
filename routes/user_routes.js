@@ -5,6 +5,7 @@ import {
   LoginUser,
   LogoutUser,
   RegisterUser,
+  UserProfile,
 } from "../controllers/user_controller.js";
 
 const router = express.Router();
@@ -12,5 +13,6 @@ const router = express.Router();
 router.route("/register").post(upload.single("profileImage"), RegisterUser);
 router.route("/login").post(LoginUser);
 router.route("/logout").get(isAuthenticated, LogoutUser);
+router.route("/userprofile").get(isAuthenticated, UserProfile);
 
 export default router;
