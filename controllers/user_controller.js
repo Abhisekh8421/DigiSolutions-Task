@@ -40,7 +40,8 @@ export const RegisterUser = asyncHandler(async (req, res) => {
       });
     }
 
-    const UserAvatarLocalPath = req.file.path;
+    console.log(req.file);
+    const UserAvatarLocalPath = req.file?.path;
 
     if (!UserAvatarLocalPath) {
       throw new ApiError(400, "Avatar local path is required");
