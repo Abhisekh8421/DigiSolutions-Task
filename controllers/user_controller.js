@@ -41,15 +41,17 @@ export const RegisterUser = asyncHandler(async (req, res) => {
     }
 
     // console.log(req.file);
-    const UserAvatarLocalPath = req.file.path;
-    // console.log("avatar local path", UserAvatarLocalPath); for debugging purposes
+    const UserAvatarLocalPath = req.file?.path;
 
     if (!UserAvatarLocalPath) {
       throw new ApiError(400, "Avatar local path is required");
     }
 
+    console.log("UserAvatarLocalPath:", UserAvatarLocalPath);
+
     const avatar = await uploadOnCloudinary(UserAvatarLocalPath);
-    // console.log("Avatar clodinary path", avatar); for debugging purpose
+
+    console.log("Cloudinary Response:", avatar);
 
     if (!avatar) {
       throw new ApiError(400, "Error uploading avatar to Cloudinary");
