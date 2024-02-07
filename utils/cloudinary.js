@@ -27,21 +27,9 @@ export const uploadOnCloudinary = async (fileBuffer) => {
   try {
     if (!fileBuffer) throw new Error("File buffer is missing");
 
-    const response = await cloudinary.uploader
-      .upload_stream(
-        {
-          resource_type: "auto",
-        },
-        (error, result) => {
-          if (error) {
-            console.error("Error uploading to Cloudinary:", error.message);
-            throw new Error("Error uploading to Cloudinary");
-          }
-          console.log("Cloudinary Response:", result);
-          return result;
-        }
-      )
-      .end(fileBuffer);
+    const response = await cloudinary.uploader.upload(fileBuffer, {
+      resource_type: "auto",
+    });
 
     return response;
   } catch (error) {
