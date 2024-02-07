@@ -41,7 +41,7 @@ export const RegisterUser = asyncHandler(async (req, res) => {
     }
 
     // console.log(req.file);
-    const UserAvatarLocalPath = req.file?.path;
+    const UserAvatarLocalPath = req.file;
 
     if (!UserAvatarLocalPath) {
       throw new ApiError(400, "Avatar local path is required");
@@ -49,7 +49,7 @@ export const RegisterUser = asyncHandler(async (req, res) => {
 
     console.log("UserAvatarLocalPath:", UserAvatarLocalPath);
 
-    const avatar = await uploadOnCloudinary(UserAvatarLocalPath);
+    const avatar = await uploadOnCloudinary(UserAvatarLocalPath.buffer);
 
     console.log("Cloudinary Response:", avatar);
 
@@ -65,17 +65,17 @@ export const RegisterUser = asyncHandler(async (req, res) => {
       role,
     });
 
-    // const createdUser = await User.findById(user._id).select(
-    //   "-password -refreshToken"
-    // );
+    const createdUser = await User.findById(user._id).select(
+      "-password -refreshToken"
+    );
 
-    // if (!createdUser) {
-    //   throw new ApiError(500, "Something went wrong while registration");
-    // }
+    if (!createdUser) {
+      throw new ApiError(500, "Something went wrong while registration");
+    }
 
     return res
       .status(201)
-      .json(new ApiResponse(201, user, "User Registered Successfully"));
+      .json(new ApiResponse(201, createdUser, "User Registered Successfully"));
   } catch (error) {
     console.error("Registration Error:", error);
     return res.status(error.statusCode || 500).json({
