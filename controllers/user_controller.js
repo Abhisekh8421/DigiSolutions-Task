@@ -64,17 +64,17 @@ export const RegisterUser = asyncHandler(async (req, res) => {
       role,
     });
 
-    const createdUser = await User.findById(user._id).select(
-      "-password -refreshToken"
-    );
+    // const createdUser = await User.findById(user._id).select(
+    //   "-password -refreshToken"
+    // );
 
-    if (!createdUser) {
-      throw new ApiError(500, "Something went wrong while registration");
-    }
+    // if (!createdUser) {
+    //   throw new ApiError(500, "Something went wrong while registration");
+    // }
 
     return res
       .status(201)
-      .json(new ApiResponse(201, createdUser, "User Registered Successfully"));
+      .json(new ApiResponse(201, user, "User Registered Successfully"));
   } catch (error) {
     console.error("Registration Error:", error);
     return res.status(error.statusCode || 500).json({
