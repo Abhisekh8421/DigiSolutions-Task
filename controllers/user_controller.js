@@ -41,21 +41,21 @@ export const RegisterUser = asyncHandler(async (req, res) => {
     }
 
     // console.log(req.file);
-    // const UserAvatarLocalPath = req.file?.path;
+    const UserAvatarLocalPath = req.file?.path;
 
-    // if (!UserAvatarLocalPath) {
-    //   throw new ApiError(400, "Avatar local path is required");
-    // }
+    if (!UserAvatarLocalPath) {
+      throw new ApiError(400, "Avatar local path is required");
+    }
 
-    // console.log("UserAvatarLocalPath:", UserAvatarLocalPath);
+    console.log("UserAvatarLocalPath:", UserAvatarLocalPath);
 
-    // const avatar = await uploadOnCloudinary(UserAvatarLocalPath);
+    const avatar = await uploadOnCloudinary(UserAvatarLocalPath);
 
-    // console.log("Cloudinary Response:", avatar);
+    console.log("Cloudinary Response:", avatar);
 
-    // if (!avatar) {
-    //   throw new ApiError(400, "Error uploading avatar to Cloudinary");
-    // }
+    if (!avatar) {
+      throw new ApiError(400, "Error uploading avatar to Cloudinary");
+    }
 
     const user = await User.create({
       username,
