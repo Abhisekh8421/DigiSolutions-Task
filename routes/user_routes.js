@@ -6,6 +6,7 @@ import {
   LoginUser,
   LogoutUser,
   RegisterUser,
+  UpdateRefreshAccessToken,
   UpdateUserDetails,
   UserProfile,
 } from "../controllers/user_controller.js";
@@ -21,5 +22,6 @@ router
   .put(isAuthenticated, upload.single("profileImage"), UpdateUserDetails);
 
 router.route("/delete-profile").delete(isAuthenticated, DeleteUserProfile);
+router.route("/refresh-token").post(UpdateRefreshAccessToken);
 
 export default router;
