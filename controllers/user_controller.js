@@ -41,7 +41,7 @@ export const RegisterUser = asyncHandler(async (req, res) => {
     }
 
     // console.log(req.file);
-    const UserAvatarLocalPath = req.file;
+    const UserAvatarLocalPath = req.file.path;
 
     if (!UserAvatarLocalPath) {
       throw new ApiError(400, "Avatar local path is required");
@@ -49,7 +49,7 @@ export const RegisterUser = asyncHandler(async (req, res) => {
 
     console.log("UserAvatarLocalPath:", UserAvatarLocalPath);
 
-    const avatar = await uploadOnCloudinary(UserAvatarLocalPath.buffer);
+    const avatar = await uploadOnCloudinary(UserAvatarLocalPath);
 
     console.log("Cloudinary Response:", avatar);
 
@@ -165,4 +165,57 @@ export const UserProfile = asyncHandler(async (req, res) => {
       "successfully fetched your profile"
     )
   );
+});
+
+export const UpdateUserDetails = asyncHandler(async (req, res) => {
+  try {
+    //fetching the userAvatar from the database
+    const currentUser = await User.findById(req.user._id);
+    //store the previous avatar image url on to the variable
+    const previousAvatarUrl = currentUser.profileImage;
+    const { username } = req.body;
+    const profileImageLocalPath = req.file?.path;
+    if (!username) {
+      throw new ApiError(401, "Username is Missing");
+    }
+    if (!profileImageLocalPath) {
+      throw new ApiError(401, "avatar file is Missing");
+    }
+
+    const profileImage = await uploadOnCloudinary(profileImageLocalPath);
+    if (!profileImage.url) {
+      throw new ApiError(400, "error uploading on cloudinary");
+    }
+
+    //delete the previous avatar image from the cloudinary
+    // if (previousAvatarUrl) {
+    //   const publicId = getPublicIdFromUrl(previousAvatarUrl);
+    //   await deleteFromCloudinary(publicId);
+    // }
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $set: {
+          profileImage: profileImage?.url,
+          username,
+        },
+      },
+      {
+        new: true,
+      }
+    ).select("-password");
+    return res
+      .status(200)
+      .json(new ApiResponse(200, user, "Updated User Details Successfully"));
+  } catch (error) {
+    console.log("error is ", error.message);
+    throw new ApiError(error.status || 500, "internal server error");
+  }
+});
+
+export const DeleteUserProfile = asyncHandler(async (req, res) => {
+  const user = req.user._id;
+  await User.findByIdAndDelete(user);
+  return res.status(200).json(new ApiResponse(200, {}, "successfully deleted"));
 });
